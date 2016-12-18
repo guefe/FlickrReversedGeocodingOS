@@ -34,7 +34,6 @@ public class Services {
 
     private final String FLICKR_API_KEY = "b725e51ea8e39a3ea2fb991c35614e65";
     private final String GMAPS_API_KEY = "AIzaSyAFdMfTTGNAXKnXtoVRqMRuyvK1WslN9ao";
-    private String oauthSecret = "15cf5ad5dbb2302a";
 
 
 
@@ -45,8 +44,6 @@ public class Services {
 
         Response response;
 
-        System.out.println(offset);
-        System.out.println(limit);
 
         try {
 
@@ -56,8 +53,6 @@ public class Services {
             String longitude = jsonResponse.getAsJsonObject("photo").getAsJsonObject("location").get("longitude").getAsString();
 
             List<String> locations = googleMapsLocationsByLatLong(latitude, longitude);
-
-            System.out.println(latitude +", "+ longitude);
 
             response = createResponseJson(locations, offset, limit);
 
@@ -88,7 +83,10 @@ public class Services {
 
         HttpClient client = HttpClientBuilder.create().build();
 
+        System.out.println("Calling Google Maps Services at " +uri.toString());
         HttpResponse mapsResponse = client.execute(mapsRequest);
+        System.out.println("Google Maps Services returned with status " +mapsResponse.getStatusLine().getStatusCode());
+
 
         JsonParser parser = new JsonParser();
         jsonResponse = parser.parse(EntityUtils.toString(mapsResponse.getEntity())).getAsJsonObject();
@@ -107,9 +105,6 @@ public class Services {
 
 
 
-
-
-
     private JsonObject loadFlickrImageGeoData(String imageId) throws URISyntaxException, IOException {
         HttpClient client = HttpClientBuilder.create().build();
 
@@ -124,10 +119,11 @@ public class Services {
 
         HttpGet getRequest = new HttpGet(uri);
 
-        System.out.println(getRequest.getURI());
         getRequest.addHeader("accept", "application/json");
 
+        System.out.println("Calling Flickr Image Services at " +uri.toString());
         HttpResponse response = client.execute(getRequest);
+        System.out.println("Flickr Image Services returned with status " +response.getStatusLine().getStatusCode());
 
         JsonParser parser = new JsonParser();
 
@@ -150,7 +146,6 @@ public class Services {
         }
 
 
-        System.out.println("response: " +locationsElement.toString());
 
         String linkBaseURI = "http://localhost:2222/cen/imageGeoData?offset={offset}&limit={limit}";
 
