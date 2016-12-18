@@ -1,0 +1,12 @@
+
+A Jetty server is embedded in order to ease the project execution.
+
+Terminal execution:
+    - mvn clean
+    - mvn compile
+    - mvn jetty:run
+
+Pagination Design decisions:
+    - Query-based selection parameters. Offset will be the initial element. Limit will be the number of returning results.
+    - Response Header: X-Total-Count to retrieve the total number of results.
+    - Link header to help the client when gettin first, last, next and previous page.
