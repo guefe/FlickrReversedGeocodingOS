@@ -18,11 +18,22 @@ public class App {
         ServletHolder servlet = new ServletHolder(new ServletContainer(config));
 
 
-
-
         Server server = new Server(2222);
         ServletContextHandler context = new ServletContextHandler(server, "/*");
         context.addServlet(servlet, "/*");
+
+        try {
+            server.start();
+            server.join();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            server.destroy();
+        }
+
 
     }
 }
